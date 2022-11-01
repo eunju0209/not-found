@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import AuthService from './service/auth';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Signup from './pages/Signup/Signup';
+import Login from './pages/Login/Login';
 
 const authService = new AuthService();
 
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
   {
     path: '/signup',
     element: <Signup authService={authService} />,
+  },
+  {
+    path: 'login',
+    element: <Login authService={authService} />,
   },
 ]);
 

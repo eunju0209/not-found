@@ -1,4 +1,5 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthService from '../../service/auth';
 
 type SignupProps = {
@@ -7,14 +8,17 @@ type SignupProps = {
 
 export default function Signup({ authService }: SignupProps) {
   const [signupValues, setSignupValues] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    console.log(signupValues);
 
     authService
-      .signup(signupValues.email, signupValues.password)
-      .then(console.log);
+      .signup(signupValues.email, signupValues.password) //
+      .then(() => {
+        navigate('/login');
+        setSignupValues({ email: '', password: '' });
+      });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
