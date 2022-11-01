@@ -8,6 +8,9 @@
 # testing
 /coverage
 
+# APT Keys
+.env
+
 # production
 /build
 
