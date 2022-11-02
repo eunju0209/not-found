@@ -1,8 +1,10 @@
 import {
   Auth,
   createUserWithEmailAndPassword,
+  GoogleAuthProvider,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signInWithPopup,
   signOut,
   User,
   UserCredential,
@@ -18,6 +20,11 @@ export default class AuthService {
 
   login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.firebaseAuth, email, password);
+  }
+
+  googleLogin() {
+    const provider = new GoogleAuthProvider();
+    return signInWithPopup(this.firebaseAuth, provider);
   }
 
   logout() {

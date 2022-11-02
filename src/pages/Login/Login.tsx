@@ -37,6 +37,12 @@ export default function Login({ authService }: LoginProps) {
     }));
   };
 
+  const handleGoogleLogin = () => {
+    authService
+      .googleLogin() //
+      .then((data) => goToHome(data.user.uid));
+  };
+
   useEffect(() => {
     authService.onAuthChange((user) => {
       user && goToHome(user.uid);
@@ -44,20 +50,23 @@ export default function Login({ authService }: LoginProps) {
   }, [authService, goToHome]);
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type='email'
-        name='email'
-        placeholder='Email'
-        onChange={handleChange}
-      />
-      <input
-        type='password'
-        name='password'
-        placeholder='Password'
-        onChange={handleChange}
-      />
-      <button type='submit'>로그인</button>
-    </form>
+    <section>
+      <form onSubmit={handleSubmit}>
+        <input
+          type='email'
+          name='email'
+          placeholder='Email'
+          onChange={handleChange}
+        />
+        <input
+          type='password'
+          name='password'
+          placeholder='Password'
+          onChange={handleChange}
+        />
+        <button type='submit'>로그인</button>
+      </form>
+      <button onClick={handleGoogleLogin}>Google 로그인</button>
+    </section>
   );
 }
