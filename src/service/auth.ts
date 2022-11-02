@@ -3,6 +3,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signInWithEmailAndPassword,
+  signOut,
   User,
   UserCredential,
 } from 'firebase/auth';
@@ -17,6 +18,10 @@ export default class AuthService {
 
   login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.firebaseAuth, email, password);
+  }
+
+  logout() {
+    signOut(this.firebaseAuth);
   }
 
   onAuthChange(onUserChanged: (user: User | null) => void) {

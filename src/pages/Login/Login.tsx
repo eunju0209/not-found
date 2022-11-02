@@ -1,4 +1,10 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { useNavigate } from 'react-router-dom';
 import AuthService from '../../service/auth';
 
@@ -10,9 +16,12 @@ export default function Login({ authService }: LoginProps) {
   const [loginValues, setLoginValues] = useState({ email: '', password: '' });
   const navigate = useNavigate();
 
-  const goToHome = (userId: string) => {
-    navigate('/', { state: { id: userId } });
-  };
+  const goToHome = useCallback(
+    (userId: string) => {
+      navigate('/', { state: { id: userId } });
+    },
+    [navigate]
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -32,7 +41,7 @@ export default function Login({ authService }: LoginProps) {
     authService.onAuthChange((user) => {
       user && goToHome(user.uid);
     });
-  });
+  }, [authService, goToHome]);
 
   return (
     <form onSubmit={handleSubmit}>

@@ -12,7 +12,7 @@ type AppProps = {
 function App({ authService }: AppProps) {
   return (
     <Routes>
-      <Route path='/' element={<Home />} />
+      <Route path='/' element={<Home authService={authService} />} />
       <Route path='signup' element={<Signup authService={authService} />} />
       <Route path='login' element={<Login authService={authService} />} />
     </Routes>
