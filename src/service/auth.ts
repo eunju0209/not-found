@@ -1,7 +1,9 @@
 import {
   Auth,
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
+  User,
   UserCredential,
 } from 'firebase/auth';
 import { auth } from './firebase';
@@ -15,5 +17,11 @@ export default class AuthService {
 
   login(email: string, password: string): Promise<UserCredential> {
     return signInWithEmailAndPassword(this.firebaseAuth, email, password);
+  }
+
+  onAuthChange(onUserChanged: (user: User | null) => void) {
+    onAuthStateChanged(this.firebaseAuth, (user) => {
+      onUserChanged(user);
+    });
   }
 }

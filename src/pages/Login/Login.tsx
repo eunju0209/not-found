@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import AuthService from '../../service/auth';
 
 type LoginProps = {
@@ -7,12 +8,17 @@ type LoginProps = {
 
 export default function Login({ authService }: LoginProps) {
   const [loginValues, setLoginValues] = useState({ email: '', password: '' });
+  const navigate = useNavigate();
+
+  const goToHome = (userId: string) => {
+    navigate('/', { state: { id: userId } });
+  };
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     authService
       .login(loginValues.email, loginValues.password)
-      .then(console.log);
+      .then((data) => goToHome(data.user.uid));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -21,6 +27,12 @@ export default function Login({ authService }: LoginProps) {
       [e.target.name]: e.target.value,
     }));
   };
+
+  useEffect(() => {
+    authService.onAuthChange((user) => {
+      user && goToHome(user.uid);
+    });
+  });
 
   return (
     <form onSubmit={handleSubmit}>
