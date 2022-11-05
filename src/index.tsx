@@ -5,6 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthService from './service/auth';
 import { BrowserRouter } from 'react-router-dom';
+import { ArticleProvider } from './context/ArticleContext';
 
 const authService = new AuthService();
 
@@ -13,9 +14,11 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <App authService={authService} />
-    </BrowserRouter>
+    <ArticleProvider>
+      <BrowserRouter>
+        <App authService={authService} />
+      </BrowserRouter>
+    </ArticleProvider>
   </React.StrictMode>
 );
 

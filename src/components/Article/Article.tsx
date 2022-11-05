@@ -1,4 +1,4 @@
-import { ArticleType } from '../../pages/Home/Home';
+import { ArticleType } from '../../context/ArticleContext';
 
 type ArticleProps = {
   article: ArticleType;

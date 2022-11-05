@@ -67,6 +67,7 @@ export default function Login({ authService }: LoginProps) {
         <button type='submit'>로그인</button>
       </form>
       <button onClick={handleGoogleLogin}>Google 로그인</button>
+      <button onClick={() => navigate('/signup')}>회원가입</button>
     </section>
   );
 }

@@ -1,12 +1,8 @@
-import { useState } from 'react';
-import { ArticleType } from '../../pages/Home/Home';
+import { useArticleState } from '../../context/ArticleContext';
 import Article from '../Article/Article';
 
-type ArticleListProps = {
-  articles: ArticleType[];
-};
-
-export default function ArticleList({ articles }: ArticleListProps) {
+export default function ArticleList() {
+  const articles = useArticleState();
   return (
     <ul>
       {articles.map((article) => (
