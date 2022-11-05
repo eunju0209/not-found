@@ -3,6 +3,8 @@ import Article from '../Article/Article';
 
 export default function ArticleList() {
   const articles = useArticleState();
+  console.log(articles);
+
   return (
     <ul>
       {articles.map((article) => (
