@@ -16,7 +16,10 @@ function App({ authService }: AppProps) {
       <Route path='/' element={<Home authService={authService} />} />
       <Route path='signup' element={<Signup authService={authService} />} />
       <Route path='login' element={<Login authService={authService} />} />
-      <Route path='/create' element={<CreateArticle />} />
+      <Route
+        path='/create'
+        element={<CreateArticle authService={authService} />}
+      />
     </Routes>
   );
 }

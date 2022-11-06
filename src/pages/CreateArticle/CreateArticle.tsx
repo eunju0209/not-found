@@ -1,15 +1,32 @@
-import { ChangeEvent, FormEvent, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useArticleDispatch } from '../../context/ArticleContext';
+import AuthService from '../../service/auth';
 
-export default function CreateArticle() {
+type CreateArticleProps = {
+  authService: AuthService;
+};
+
+export default function CreateArticle({ authService }: CreateArticleProps) {
   const navigate = useNavigate();
+  const navigateState = useLocation().state;
+  const [userId, setUserId] = useState(navigateState && navigateState.id);
   const [articleValues, setArticleValues] = useState({
     title: '',
     category: '',
     content: '',
   });
   const articleDispatch = useArticleDispatch();
+
+  useEffect(() => {
+    authService.onAuthChange((user) => {
+      if (user) {
+        setUserId(user.uid);
+      } else {
+        navigate('/');
+      }
+    });
+  }, [authService, navigate]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -20,7 +37,7 @@ export default function CreateArticle() {
       userId: '1',
       email: 'bori@gmail.com',
     };
-    articleDispatch({ type: 'add', article });
+    articleDispatch({ type: 'add', userId, article });
     navigate('/');
   };
 

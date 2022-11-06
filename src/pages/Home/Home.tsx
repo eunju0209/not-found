@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ArticleList from '../../components/ArticleList/ArticleList';
 import Header from '../../components/Header/Header';
@@ -8,11 +9,19 @@ type HomeProps = {
 };
 
 export default function Home({ authService }: HomeProps) {
+  const [addBtn, setAddBtn] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    authService.onAuthChange((user) => {
+      user ? setAddBtn(true) : setAddBtn(false);
+    });
+  });
+
   return (
     <>
       <Header authService={authService} />
-      <button onClick={() => navigate('/create')}>글쓰기</button>
+      {addBtn && <button onClick={() => navigate('/create')}>글쓰기</button>}
       <ArticleList />
     </>
   );
