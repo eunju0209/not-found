@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePostState } from '../context/PostContext';
+import { usePostsState } from '../context/PostContext';
+
 import AuthService from '../service/auth';
 import Post from './Post';
 
@@ -9,7 +10,7 @@ type PostsProps = {
 };
 
 export default function Posts({ authService }: PostsProps) {
-  const posts = usePostState();
+  const posts = usePostsState();
   const [addBtn, setAddBtn] = useState(false);
   const navigate = useNavigate();
 
@@ -21,7 +22,7 @@ export default function Posts({ authService }: PostsProps) {
 
   return (
     <>
-      {addBtn && <button onClick={() => navigate('/create')}>글쓰기</button>}
+      {addBtn && <button onClick={() => navigate('/newpost')}>글쓰기</button>}
       <ul>
         {posts.map((post) => (
           <Post key={post.id} post={post} />

@@ -1,11 +1,11 @@
 import {
   createContext,
-  Dispatch,
   ReactNode,
   useContext,
-  useReducer,
+  useEffect,
+  useState,
 } from 'react';
-import { PostActionType, postReducer } from '../reducer/postReducer';
+import PostRepository from '../service/postRepository';
 
 type PostsProviderProps = {
   children: ReactNode;
@@ -21,53 +21,47 @@ export type PostType = {
   email: string;
 };
 
-export const PostStateContext = createContext<PostType[] | null>(null);
-export const PostDispatchContext =
-  createContext<Dispatch<PostActionType> | null>(null);
+const PostStateContext = createContext<PostType[] | null>(null);
+const AddPostContext = createContext<((post: PostType) => void) | null>(null);
+
+const postRepository = new PostRepository();
 
 export function PostProvider({ children }: PostsProviderProps) {
-  const [postState, postDispatch] = useReducer(postReducer, posts);
+  const [posts, setPosts] = useState<PostType[]>([]);
+
+  useEffect(() => {
+    const stopSync = postRepository.getAll((posts) => {
+      setPosts(Object.values(posts));
+    });
+    return () => stopSync();
+  });
+
+  const addPost = (post: PostType) => {
+    postRepository.save(post);
+    setPosts((posts) => [post, ...posts]);
+  };
+
   return (
-    <PostStateContext.Provider value={postState}>
-      <PostDispatchContext.Provider value={postDispatch}>
+    <PostStateContext.Provider value={posts}>
+      <AddPostContext.Provider value={addPost}>
         {children}
-      </PostDispatchContext.Provider>
+      </AddPostContext.Provider>
     </PostStateContext.Provider>
   );
 }
 
-export const usePostState = () => {
+export const usePostsState = () => {
   const result = useContext(PostStateContext);
   if (!result) {
     throw new Error('cannat find PostState');
   }
   return result;
 };
-export const usePostDispatch = () => {
-  const result = useContext(PostDispatchContext);
+
+export const useAddPost = () => {
+  const result = useContext(AddPostContext);
   if (!result) {
-    throw new Error('cannat find PostDispatch');
+    throw new Error('cannat find AddPost');
   }
   return result;
 };
-
-const posts = [
-  {
-    id: '123',
-    category: 'All',
-    title: '제목입니다.',
-    content: '내용입니다.',
-    createdAt: new Date().toString(),
-    userId: '1',
-    email: 'bori@gmail.com',
-  },
-  {
-    id: '124',
-    category: 'JavaScript',
-    title: '제목입니다.2',
-    content: '내용입니다.2',
-    createdAt: new Date().toString(),
-    userId: '1',
-    email: 'bori@gmail.com',
-  },
-];

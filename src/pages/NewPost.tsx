@@ -1,13 +1,14 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePostDispatch } from '../context/PostContext';
+import { useAddPost } from '../context/PostContext';
 import AuthService from '../service/auth';
 
-type CreatePostProps = {
+type NewPostProps = {
   authService: AuthService;
 };
 
-export default function CreatePost({ authService }: CreatePostProps) {
+export default function NewPost({ authService }: NewPostProps) {
+  const addPost = useAddPost();
   const navigate = useNavigate();
   const navigateState = useLocation().state;
   const [userId, setUserId] = useState(navigateState && navigateState.id);
@@ -16,7 +17,6 @@ export default function CreatePost({ authService }: CreatePostProps) {
     category: '',
     content: '',
   });
-  const postDispatch = usePostDispatch();
 
   useEffect(() => {
     authService.onAuthChange((user) => {
@@ -34,10 +34,10 @@ export default function CreatePost({ authService }: CreatePostProps) {
       ...postValues,
       id: Date.now().toString(),
       createdAt: new Date().toString(),
-      userId: '1',
+      userId,
       email: 'bori@gmail.com',
     };
-    postDispatch({ type: 'add', userId, post });
+    addPost(post);
     navigate('/');
   };
 
