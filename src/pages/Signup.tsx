@@ -29,25 +29,35 @@ export default function Signup({ authService }: SignupProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type='email'
-        name='email'
-        value={signupValues.email}
-        onChange={handleChange}
-        placeholder='Email'
-        required
-      />
-      <input
-        type='password'
-        name='password'
-        value={signupValues.password}
-        onChange={handleChange}
-        placeholder='Password'
-        minLength={6}
-        required
-      />
-      <button type='submit'>회원가입</button>
-    </form>
+    <section className='flex flex-col items-center w-full'>
+      <h1 className='text-5xl font-bold text-slate-600 mb-7'>Signup</h1>
+      <form className='flex flex-col w-3/12' onSubmit={handleSubmit}>
+        <input
+          className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-2'
+          type='email'
+          name='email'
+          value={signupValues.email}
+          onChange={handleChange}
+          placeholder='Email'
+          required
+        />
+        <input
+          className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-2'
+          type='password'
+          name='password'
+          value={signupValues.password}
+          onChange={handleChange}
+          placeholder='Password'
+          minLength={6}
+          required
+        />
+        <button
+          className='bg-main text-xl py-2 rounded-lg text-white font-bold'
+          type='submit'
+        >
+          회원가입
+        </button>
+      </form>
+    </section>
   );
 }

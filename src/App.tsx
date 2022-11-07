@@ -12,7 +12,9 @@ function App({ authService }: AppProps) {
     <>
       <Header authService={authService} />
       <PostProvider>
-        <Outlet />
+        <div className='flex flex-col justify-center w-full max-w-screen-xl h-full'>
+          <Outlet />
+        </div>
       </PostProvider>
     </>
   );

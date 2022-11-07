@@ -50,24 +50,44 @@ export default function Login({ authService }: LoginProps) {
   }, [authService, goToHome]);
 
   return (
-    <section>
-      <form onSubmit={handleSubmit}>
+    <section className='flex flex-col items-center w-full'>
+      <h1 className='text-5xl font-bold text-slate-600 mb-7'>Login</h1>
+      <form className='flex flex-col w-3/12' onSubmit={handleSubmit}>
         <input
+          className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-2'
           type='email'
           name='email'
           placeholder='Email'
           onChange={handleChange}
         />
         <input
+          className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-2'
           type='password'
           name='password'
           placeholder='Password'
           onChange={handleChange}
         />
-        <button type='submit'>로그인</button>
+        <button
+          className='bg-slate-400 text-xl py-2 rounded-lg text-white font-bold'
+          type='submit'
+        >
+          로그인
+        </button>
       </form>
-      <button onClick={handleGoogleLogin}>Google 로그인</button>
-      <button onClick={() => navigate('/signup')}>회원가입</button>
+      <div className='flex justify-around w-3/12 mt-3'>
+        <button
+          className='w-36 bg-main py-2 rounded-lg text-white font-bold'
+          onClick={handleGoogleLogin}
+        >
+          Google 로그인
+        </button>
+        <button
+          className='w-36 bg-main py-2 rounded-lg text-white font-bold'
+          onClick={() => navigate('/signup')}
+        >
+          회원가입
+        </button>
+      </div>
     </section>
   );
 }
