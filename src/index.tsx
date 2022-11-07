@@ -4,21 +4,37 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import AuthService from './service/auth';
-import { BrowserRouter } from 'react-router-dom';
-import { ArticleProvider } from './context/ArticleContext';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import NotFound from './pages/NotFound';
+import Posts from './components/Posts';
+import PostDetail from './pages/PostDetail';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
 
 const authService = new AuthService();
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App authService={authService} />,
+    errorElement: <NotFound />,
+    children: [
+      { index: true, element: <Posts authService={authService} /> },
+      { path: 'posts', element: <Posts authService={authService} /> },
+      { path: 'posts/:keyword', element: <Posts authService={authService} /> },
+      { path: 'posts/detail/:postId', element: <PostDetail /> },
+      { path: 'login', element: <Login authService={authService} /> },
+      { path: 'signup', element: <Signup authService={authService} /> },
+    ],
+  },
+]);
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
-    <ArticleProvider>
-      <BrowserRouter>
-        <App authService={authService} />
-      </BrowserRouter>
-    </ArticleProvider>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 

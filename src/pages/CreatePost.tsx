@@ -1,22 +1,22 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useArticleDispatch } from '../../context/ArticleContext';
-import AuthService from '../../service/auth';
+import { usePostDispatch } from '../context/PostContext';
+import AuthService from '../service/auth';
 
-type CreateArticleProps = {
+type CreatePostProps = {
   authService: AuthService;
 };
 
-export default function CreateArticle({ authService }: CreateArticleProps) {
+export default function CreatePost({ authService }: CreatePostProps) {
   const navigate = useNavigate();
   const navigateState = useLocation().state;
   const [userId, setUserId] = useState(navigateState && navigateState.id);
-  const [articleValues, setArticleValues] = useState({
+  const [postValues, setPostValues] = useState({
     title: '',
     category: '',
     content: '',
   });
-  const articleDispatch = useArticleDispatch();
+  const postDispatch = usePostDispatch();
 
   useEffect(() => {
     authService.onAuthChange((user) => {
@@ -30,21 +30,21 @@ export default function CreateArticle({ authService }: CreateArticleProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const article = {
-      ...articleValues,
+    const post = {
+      ...postValues,
       id: Date.now().toString(),
       createdAt: new Date().toString(),
       userId: '1',
       email: 'bori@gmail.com',
     };
-    articleDispatch({ type: 'add', userId, article });
+    postDispatch({ type: 'add', userId, post });
     navigate('/');
   };
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
-    setArticleValues((values) => ({
+    setPostValues((values) => ({
       ...values,
       [e.target.name]: e.target.value,
     }));
@@ -55,12 +55,12 @@ export default function CreateArticle({ authService }: CreateArticleProps) {
       <input
         type='text'
         name='title'
-        value={articleValues.title}
+        value={postValues.title}
         onChange={handleChange}
       />
       <select
         name='category'
-        value={articleValues.category}
+        value={postValues.category}
         onChange={handleChange}
       >
         <option value='javascript'>JavaScript</option>
@@ -71,7 +71,7 @@ export default function CreateArticle({ authService }: CreateArticleProps) {
       </select>
       <textarea
         name='content'
-        value={articleValues.content}
+        value={postValues.content}
         onChange={handleChange}
       ></textarea>
       <button type='submit'>확인</button>

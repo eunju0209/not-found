@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../../service/auth';
+import AuthService from '../service/auth';
 
 type HeaderProps = {
   authService: AuthService;
