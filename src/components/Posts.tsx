@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { usePostsState } from '../context/PostContext';
+import { useNavigate, useParams } from 'react-router-dom';
+import { PostType, usePostsState } from '../context/PostContext';
 import AuthService from '../service/auth';
 import Post from './Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -10,9 +10,10 @@ type PostsProps = {
 };
 
 export default function Posts({ authService }: PostsProps) {
+  const navigate = useNavigate();
+  const { keyword } = useParams();
   const posts = usePostsState();
   const [addBtn, setAddBtn] = useState(false);
-  const navigate = useNavigate();
 
   useEffect(() => {
     authService.onAuthChange((user) => {
@@ -20,8 +21,10 @@ export default function Posts({ authService }: PostsProps) {
     });
   }, [authService]);
 
+  const filtered = keyword ? getFilteredItems(posts, keyword) : posts;
+
   return (
-    <section className='flex flex-col items-center'>
+    <section className='flex flex-col items-center py-6 h-full min-h-0'>
       {addBtn && (
         <button
           className='flex items-center justify-center bg-slate-400 w-28 text-xl py-2 rounded-lg text-white font-bold mb-4 hover:bg-main transition-all'
@@ -31,11 +34,15 @@ export default function Posts({ authService }: PostsProps) {
           New
         </button>
       )}
-      <ul className='w-full'>
-        {posts.map((post) => (
+      <ul className='w-full overflow-y-auto grow shrink'>
+        {filtered.map((post) => (
           <Post key={post.id} post={post} />
         ))}
       </ul>
     </section>
   );
 }
+
+const getFilteredItems = (posts: PostType[], filter: string) => {
+  return posts.filter((post) => post.title.includes(filter));
+};

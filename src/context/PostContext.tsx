@@ -31,10 +31,10 @@ export function PostProvider({ children }: PostsProviderProps) {
 
   useEffect(() => {
     const stopSync = postRepository.getAll((posts) => {
-      setPosts(Object.values(posts));
+      setPosts(Object.values(posts).reverse());
     });
     return () => stopSync();
-  });
+  }, []);
 
   const addPost = (post: PostType) => {
     postRepository.save(post);
