@@ -1,17 +1,50 @@
-import { Database, off, onValue, ref, remove, set } from 'firebase/database';
-import { PostType } from '../context/PostContext';
+import {
+  Database,
+  endAt,
+  equalTo,
+  off,
+  onValue,
+  orderByChild,
+  query,
+  ref,
+  remove,
+  set,
+  startAt,
+} from 'firebase/database';
+import { PostType } from '../components/Post';
 import { db } from './firebase';
 
 export default class PostRepository {
   private firebaseDB: Database = db;
 
-  getAll(onUpdate: (posts: PostType[]) => void) {
-    const query = ref(this.firebaseDB, `posts`);
-    onValue(query, (snapshot) => {
+  sync(onUpdate: (posts: PostType[]) => void, category: string) {
+    const postQuery =
+      category === 'all'
+        ? ref(this.firebaseDB, 'posts')
+        : query(
+            ref(this.firebaseDB, 'posts'),
+            orderByChild('category'),
+            equalTo(category)
+          );
+    onValue(postQuery, (snapshot) => {
       const data = snapshot.val();
-      data && onUpdate(data);
+      data ? onUpdate(data) : onUpdate([]);
     });
-    return () => off(query);
+    return () => off(postQuery);
+  }
+
+  syncByKeyword(onUpdate: (posts: PostType[]) => void, keyword: string) {
+    const postQuery = query(
+      ref(this.firebaseDB, 'posts'),
+      orderByChild('title'),
+      startAt(keyword),
+      endAt(`${keyword}\uf8ff`)
+    );
+    onValue(postQuery, (snapshot) => {
+      const data = snapshot.val();
+      data ? onUpdate(data) : onUpdate([]);
+    });
+    return () => off(postQuery);
   }
 
   save(post: PostType) {

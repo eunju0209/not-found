@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAddPost } from '../context/PostContext';
+import { usePostRepository } from '../context/PostRepositoryContext';
 import AuthService from '../service/auth';
 
 type NewPostProps = {
@@ -8,7 +8,7 @@ type NewPostProps = {
 };
 
 export default function NewPost({ authService }: NewPostProps) {
-  const addPost = useAddPost();
+  const postRepository = usePostRepository();
   const navigate = useNavigate();
   const navigateState = useLocation().state;
   const [userId, setUserId] = useState(navigateState && navigateState.id);
@@ -37,7 +37,7 @@ export default function NewPost({ authService }: NewPostProps) {
       userId,
       email: 'bori@gmail.com',
     };
-    addPost(post);
+    postRepository.save(post);
     navigate('/');
   };
 

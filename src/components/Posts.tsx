@@ -1,34 +1,42 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { PostType, usePostsState } from '../context/PostContext';
+
 import AuthService from '../service/auth';
-import Post from './Post';
+import Post, { PostType } from './Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import PostRepository from '../service/postRepository';
 
 type PostsProps = {
   authService: AuthService;
 };
 
+const postRepository = new PostRepository();
+
 export default function Posts({ authService }: PostsProps) {
   const navigate = useNavigate();
   const { keyword } = useParams();
-  const posts = usePostsState();
+  const [posts, setPosts] = useState<PostType[]>([]);
   const [addBtn, setAddBtn] = useState(false);
   const [category, setCategory] = useState('all');
+
+  useEffect(() => {
+    const stopSync = keyword
+      ? postRepository.syncByKeyword(
+          (posts) => setPosts(Object.values(posts).reverse()),
+          keyword
+        )
+      : postRepository.sync(
+          (posts) => setPosts(Object.values(posts).reverse()),
+          category
+        );
+    return () => stopSync();
+  }, [keyword, category]);
 
   useEffect(() => {
     authService.onAuthChange((user) => {
       user ? setAddBtn(true) : setAddBtn(false);
     });
   }, [authService]);
-
-  const filtered = keyword
-    ? getSearchItems(posts, keyword)
-    : getFilteredItems(posts, category);
-
-  const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    setCategory(e.target.value);
-  };
 
   return (
     <section className='flex flex-col items-center py-6 h-full min-h-0'>
@@ -47,7 +55,7 @@ export default function Posts({ authService }: PostsProps) {
         <select
           className='w-36 text-md p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-3 mr-auto'
           value={category}
-          onChange={handleChange}
+          onChange={(e) => setCategory(e.target.value)}
         >
           <option value='all'>All</option>
           <option value='javascript'>JavaScript</option>
@@ -58,21 +66,10 @@ export default function Posts({ authService }: PostsProps) {
         </select>
       )}
       <ul className='w-full overflow-y-auto grow shrink'>
-        {filtered.map((post) => (
+        {posts.map((post) => (
           <Post key={post.id} post={post} />
         ))}
       </ul>
     </section>
   );
 }
-
-const getSearchItems = (posts: PostType[], filter: string) => {
-  return posts.filter((post) => post.title.includes(filter));
-};
-
-const getFilteredItems = (posts: PostType[], filter: string) => {
-  if (filter === 'all') {
-    return posts;
-  }
-  return posts.filter((post) => post.category === filter);
-};
