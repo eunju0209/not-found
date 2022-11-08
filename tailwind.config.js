@@ -6,6 +6,9 @@ module.exports = {
       colors: {
         main: '#2dd4bf',
       },
+      minHeight: {
+        40: '10rem',
+      },
     },
   },
   plugins: [],

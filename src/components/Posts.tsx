@@ -71,8 +71,6 @@ const getSearchItems = (posts: PostType[], filter: string) => {
 };
 
 const getFilteredItems = (posts: PostType[], filter: string) => {
-  console.log(filter);
-
   if (filter === 'all') {
     return posts;
   }

@@ -23,7 +23,10 @@ const router = createBrowserRouter([
       { index: true, element: <Posts authService={authService} /> },
       { path: 'posts', element: <Posts authService={authService} /> },
       { path: 'posts/:keyword', element: <Posts authService={authService} /> },
-      { path: 'posts/detail/:postId', element: <PostDetail /> },
+      {
+        path: 'posts/detail/:postId',
+        element: <PostDetail authService={authService} />,
+      },
       { path: 'login', element: <Login authService={authService} /> },
       { path: 'signup', element: <Signup authService={authService} /> },
       { path: 'newpost', element: <NewPost authService={authService} /> },

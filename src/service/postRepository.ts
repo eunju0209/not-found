@@ -1,4 +1,4 @@
-import { Database, off, onValue, ref, set } from 'firebase/database';
+import { Database, off, onValue, ref, remove, set } from 'firebase/database';
 import { PostType } from '../context/PostContext';
 import { db } from './firebase';
 
@@ -16,5 +16,9 @@ export default class PostRepository {
 
   save(post: PostType) {
     set(ref(this.firebaseDB, `posts/${post.id}`), post);
+  }
+
+  remove(postId: string) {
+    remove(ref(this.firebaseDB, `posts/${postId}`));
   }
 }
