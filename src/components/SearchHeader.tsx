@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import AuthService from '../service/auth';
 import { BsFillExclamationCircleFill, BsSearch } from 'react-icons/bs';
 
@@ -7,7 +7,8 @@ type HeaderProps = {
   authService: AuthService;
 };
 
-export default function Header({ authService }: HeaderProps) {
+export default function SearchHeader({ authService }: HeaderProps) {
+  const { keyword } = useParams();
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [text, setText] = useState('');
@@ -22,6 +23,8 @@ export default function Header({ authService }: HeaderProps) {
     });
   }, [authService]);
 
+  useEffect(() => setText(keyword || ''), [keyword]);
+
   const handleLogout = () => {
     authService.logout();
     setUserId('');
@@ -29,6 +32,9 @@ export default function Header({ authService }: HeaderProps) {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
+    if (text.trim().length === 0) {
+      return;
+    }
     navigate(`posts/${text}`);
   };
 
