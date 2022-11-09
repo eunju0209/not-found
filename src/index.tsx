@@ -11,6 +11,7 @@ import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NewPost from './pages/NewPost';
+import UpdatePost from './components/UpdatePost';
 
 const authService = new AuthService();
 
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: 'posts/detail/:postId',
         element: <PostDetail authService={authService} />,
+      },
+      {
+        path: 'posts/update/:postId',
+        element: <UpdatePost />,
       },
       { path: 'login', element: <Login authService={authService} /> },
       { path: 'signup', element: <Signup authService={authService} /> },

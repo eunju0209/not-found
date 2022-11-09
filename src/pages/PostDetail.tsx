@@ -45,9 +45,19 @@ export default function PostDetail({ authService }: PostDetailProps) {
             삭제
           </button>
         )}
+        {user && (
+          <button
+            className='w-24 py-2 bg-slate-400 hover:bg-main px-3 rounded-md text-white font-bold transition-all mr-3'
+            onClick={() =>
+              navigate(`/posts/update/${post.id}`, { state: { post } })
+            }
+          >
+            수정
+          </button>
+        )}
         <button
           className='w-24 py-2 bg-slate-400 hover:bg-main px-3 rounded-md text-white font-bold transition-all'
-          onClick={() => navigate(-1)}
+          onClick={() => navigate('/')}
         >
           확인
         </button>

@@ -10,6 +10,7 @@ import {
   remove,
   set,
   startAt,
+  update,
 } from 'firebase/database';
 import { PostType } from '../components/Post';
 import { db } from './firebase';
@@ -53,5 +54,10 @@ export default class PostRepository {
 
   remove(postId: string) {
     remove(ref(this.firebaseDB, `posts/${postId}`));
+  }
+
+  update(postId: string, post: PostType) {
+    const updates = { [`/posts/${postId}`]: post };
+    update(ref(this.firebaseDB), updates);
   }
 }
