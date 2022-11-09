@@ -1,13 +1,9 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePostRepository } from '../context/PostRepositoryContext';
-import AuthService from '../service/auth';
+import { useAuth, usePostRepository } from '../context/FirebaseContext';
 
-type NewPostProps = {
-  authService: AuthService;
-};
-
-export default function NewPost({ authService }: NewPostProps) {
+export default function NewPost() {
+  const authService = useAuth();
   const postRepository = usePostRepository();
   const navigate = useNavigate();
   const navigateState = useLocation().state;
@@ -51,7 +47,7 @@ export default function NewPost({ authService }: NewPostProps) {
   };
 
   return (
-    <section className='flex flex-col items-center w-full'>
+    <section className='flex flex-col items-center w-full pt-10 pb-3'>
       <h1 className='text-5xl font-bold text-slate-600 mb-7'>New Post</h1>
       <form className='flex flex-col w-full' onSubmit={handleSubmit}>
         <input

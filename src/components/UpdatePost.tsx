@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePostRepository } from '../context/PostRepositoryContext';
+import { usePostRepository } from '../context/FirebaseContext';
 
 export default function UpdatePost() {
   const postRepository = usePostRepository();

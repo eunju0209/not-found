@@ -1,13 +1,10 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import AuthService from '../service/auth';
 import { BsFillExclamationCircleFill, BsSearch } from 'react-icons/bs';
+import { useAuth } from '../context/FirebaseContext';
 
-type HeaderProps = {
-  authService: AuthService;
-};
-
-export default function SearchHeader({ authService }: HeaderProps) {
+export default function SearchHeader() {
+  const authService = useAuth();
   const { keyword } = useParams();
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');

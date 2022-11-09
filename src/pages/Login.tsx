@@ -6,15 +6,12 @@ import {
   useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../service/auth';
+import { useAuth } from '../context/FirebaseContext';
 
-type LoginProps = {
-  authService: AuthService;
-};
-
-export default function Login({ authService }: LoginProps) {
-  const [loginValues, setLoginValues] = useState({ email: '', password: '' });
+export default function Login() {
+  const authService = useAuth();
   const navigate = useNavigate();
+  const [loginValues, setLoginValues] = useState({ email: '', password: '' });
 
   const goToHome = useCallback(
     (userId: string) => {
@@ -50,7 +47,7 @@ export default function Login({ authService }: LoginProps) {
   }, [authService, goToHome]);
 
   return (
-    <section className='flex flex-col items-center w-full'>
+    <section className='flex flex-col items-center w-full p-10 pb-3'>
       <h1 className='text-5xl font-bold text-slate-600 mb-7'>Login</h1>
       <form className='flex flex-col w-3/12' onSubmit={handleSubmit}>
         <input

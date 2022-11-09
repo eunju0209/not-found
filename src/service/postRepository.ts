@@ -1,6 +1,5 @@
 import {
   Database,
-  endAt,
   equalTo,
   off,
   onValue,
@@ -9,7 +8,6 @@ import {
   ref,
   remove,
   set,
-  startAt,
   update,
 } from 'firebase/database';
 import { PostType } from '../components/Post';
@@ -34,18 +32,13 @@ export default class PostRepository {
     return () => off(postQuery);
   }
 
-  syncByKeyword(onUpdate: (posts: PostType[]) => void, keyword: string) {
-    const postQuery = query(
-      ref(this.firebaseDB, 'posts'),
-      orderByChild('title'),
-      startAt(keyword),
-      endAt(`${keyword}\uf8ff`)
-    );
-    onValue(postQuery, (snapshot) => {
+  syncByKeyword(onUpdate: (posts: PostType[]) => void) {
+    const query = ref(this.firebaseDB, 'posts');
+    onValue(query, (snapshot) => {
       const data = snapshot.val();
       data ? onUpdate(data) : onUpdate([]);
     });
-    return () => off(postQuery);
+    return () => off(query);
   }
 
   save(post: PostType) {

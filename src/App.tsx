@@ -1,22 +1,15 @@
 import { Outlet } from 'react-router-dom';
 import SearchHeader from './components/SearchHeader';
-import { PostRepositoryProvider } from './context/PostRepositoryContext';
-import AuthService from './service/auth';
+import { FirebaseProvider } from './context/FirebaseContext';
 
-type AppProps = {
-  authService: AuthService;
-};
-
-function App({ authService }: AppProps) {
+function App() {
   return (
-    <>
-      <SearchHeader authService={authService} />
-      <PostRepositoryProvider>
-        <div className='flex flex-col justify-center w-full max-w-screen-xl h-full min-h-0'>
-          <Outlet />
-        </div>
-      </PostRepositoryProvider>
-    </>
+    <FirebaseProvider>
+      <SearchHeader />
+      <div className='flex flex-col justify-center w-full max-w-screen-xl px-3'>
+        <Outlet />
+      </div>
+    </FirebaseProvider>
   );
 }
 

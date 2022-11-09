@@ -1,18 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import AuthService from '../service/auth';
 import Post, { PostType } from './Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
-import PostRepository from '../service/postRepository';
+import { useAuth, usePostRepository } from '../context/FirebaseContext';
 
-type PostsProps = {
-  authService: AuthService;
-};
-
-const postRepository = new PostRepository();
-
-export default function Posts({ authService }: PostsProps) {
+export default function Posts() {
+  const authService = useAuth();
+  const postRepository = usePostRepository();
   const navigate = useNavigate();
   const { keyword } = useParams();
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -21,16 +15,18 @@ export default function Posts({ authService }: PostsProps) {
 
   useEffect(() => {
     const stopSync = keyword
-      ? postRepository.syncByKeyword(
-          (posts) => setPosts(Object.values(posts).reverse()),
-          keyword
-        )
+      ? postRepository.syncByKeyword((data) => {
+          const posts = Object.values(data)
+            .reverse()
+            .filter((post) => post.title.includes(keyword));
+          setPosts(posts);
+        })
       : postRepository.sync(
           (posts) => setPosts(Object.values(posts).reverse()),
           category
         );
     return () => stopSync();
-  }, [keyword, category]);
+  }, [keyword, category, postRepository]);
 
   useEffect(() => {
     authService.onAuthChange((user) => {

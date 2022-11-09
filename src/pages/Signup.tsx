@@ -1,14 +1,11 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import AuthService from '../service/auth';
+import { useAuth } from '../context/FirebaseContext';
 
-type SignupProps = {
-  authService: AuthService;
-};
-
-export default function Signup({ authService }: SignupProps) {
-  const [signupValues, setSignupValues] = useState({ email: '', password: '' });
+export default function Signup() {
+  const authService = useAuth();
   const navigate = useNavigate();
+  const [signupValues, setSignupValues] = useState({ email: '', password: '' });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -29,7 +26,7 @@ export default function Signup({ authService }: SignupProps) {
   };
 
   return (
-    <section className='flex flex-col items-center w-full'>
+    <section className='flex flex-col items-center w-full p-10 pb-3'>
       <h1 className='text-5xl font-bold text-slate-600 mb-7'>Signup</h1>
       <form className='flex flex-col w-3/12' onSubmit={handleSubmit}>
         <input

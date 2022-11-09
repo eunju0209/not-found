@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import AuthService from './service/auth';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './pages/NotFound';
 import Posts from './components/Posts';
@@ -13,28 +12,26 @@ import Signup from './pages/Signup';
 import NewPost from './pages/NewPost';
 import UpdatePost from './components/UpdatePost';
 
-const authService = new AuthService();
-
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App authService={authService} />,
+    element: <App />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <Posts authService={authService} /> },
-      { path: 'posts', element: <Posts authService={authService} /> },
-      { path: 'posts/:keyword', element: <Posts authService={authService} /> },
+      { index: true, element: <Posts /> },
+      { path: 'posts', element: <Posts /> },
+      { path: 'posts/:keyword', element: <Posts /> },
       {
         path: 'posts/detail/:postId',
-        element: <PostDetail authService={authService} />,
+        element: <PostDetail />,
       },
       {
         path: 'posts/update/:postId',
         element: <UpdatePost />,
       },
-      { path: 'login', element: <Login authService={authService} /> },
-      { path: 'signup', element: <Signup authService={authService} /> },
-      { path: 'newpost', element: <NewPost authService={authService} /> },
+      { path: 'login', element: <Login /> },
+      { path: 'signup', element: <Signup /> },
+      { path: 'newpost', element: <NewPost /> },
     ],
   },
 ]);
