@@ -1,10 +1,4 @@
-import {
-  ChangeEvent,
-  FormEvent,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/FirebaseContext';
 
@@ -13,18 +7,11 @@ export default function Login() {
   const navigate = useNavigate();
   const [loginValues, setLoginValues] = useState({ email: '', password: '' });
 
-  const goToHome = useCallback(
-    (userId: string) => {
-      navigate('/', { state: { id: userId } });
-    },
-    [navigate]
-  );
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     authService
       .login(loginValues.email, loginValues.password)
-      .then((data) => goToHome(data.user.uid));
+      .then(() => navigate('/'));
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -37,14 +24,14 @@ export default function Login() {
   const handleGoogleLogin = () => {
     authService
       .googleLogin() //
-      .then((data) => goToHome(data.user.uid));
+      .then(() => navigate('/'));
   };
 
   useEffect(() => {
     authService.onAuthChange((user) => {
-      user && goToHome(user.uid);
+      user && navigate('/');
     });
-  }, [authService, goToHome]);
+  }, [authService, navigate]);
 
   return (
     <section className='flex flex-col items-center w-full p-10 pb-3'>
