@@ -49,8 +49,6 @@ export default class PostRepository {
     );
     onValue(postQuery, (snapshot) => {
       const data = snapshot.val();
-      console.log(data);
-
       data ? onUpdate(data) : onUpdate([]);
     });
     return () => off(postQuery);

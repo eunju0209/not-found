@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Post, { PostType } from './Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
+import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 import { useAuth, usePostRepository } from '../context/FirebaseContext';
 
 export default function Posts() {
@@ -37,11 +38,15 @@ export default function Posts() {
 
     const observer = new IntersectionObserver((entries, observer) => {
       if (entries[0].isIntersecting) {
-        postRepository.syncNext((data) => {
-          const posts = Object.values(data).reverse();
-          setPosts((prev) => [...prev, ...posts]);
-          posts.length > 1 ? setLast(posts[posts.length - 1].id) : setLast('');
-        }, last);
+        setTimeout(() => {
+          postRepository.syncNext((data) => {
+            const posts = Object.values(data).reverse();
+            setPosts((prev) => [...prev, ...posts]);
+            posts.length > 1
+              ? setLast(posts[posts.length - 1].id)
+              : setLast('');
+          }, last);
+        }, 300);
       }
     });
     observer.observe(observerTarget.current);
@@ -89,7 +94,16 @@ export default function Posts() {
           <Post key={post.id} post={post} />
         ))}
       </ul>
-      {category === 'all' && last ? <div ref={observerTarget}>More</div> : ''}
+      {category === 'all' && last && !keyword ? (
+        <div
+          className='mt-5 text-5xl animate-bounce text-main'
+          ref={observerTarget}
+        >
+          <BsFillArrowDownCircleFill />
+        </div>
+      ) : (
+        ''
+      )}
     </section>
   );
 }
