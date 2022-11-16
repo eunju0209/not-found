@@ -1,12 +1,18 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth, usePostRepository } from '../context/FirebaseContext';
+import '@toast-ui/editor/dist/toastui-editor.css';
+import { Editor } from '@toast-ui/react-editor';
+import 'tui-color-picker/dist/tui-color-picker.css';
+import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
+import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
 
 export default function NewPost() {
   const authService = useAuth();
   const postRepository = usePostRepository();
   const navigate = useNavigate();
   const navigateState = useLocation().state;
+  const editorRef = useRef<Editor>(null);
   const [userId, setUserId] = useState(navigateState && navigateState.id);
   const [postValues, setPostValues] = useState({
     title: '',
@@ -38,12 +44,17 @@ export default function NewPost() {
   };
 
   const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     setPostValues((values) => ({
       ...values,
       [e.target.name]: e.target.value,
     }));
+  };
+
+  const handleEditor = () => {
+    const content = editorRef.current!.getInstance().getHTML();
+    setPostValues((values) => ({ ...values, content }));
   };
 
   return (
@@ -70,16 +81,16 @@ export default function NewPost() {
           <option value='vue'>Vue</option>
           <option value='etc'>Etc</option>
         </select>
-        <textarea
-          className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-4'
-          name='content'
-          value={postValues.content}
-          placeholder='내용을 입력하세요.'
-          rows={6}
-          onChange={handleChange}
-        ></textarea>
+        <Editor
+          initialValue=' '
+          initialEditType='wysiwyg'
+          hideModeSwitch={true}
+          plugins={[colorSyntax]}
+          ref={editorRef}
+          onChange={handleEditor}
+        />
         <button
-          className='w-24 py-2 ml-auto bg-slate-400 hover:bg-main px-3 rounded-md text-white font-bold transition-all'
+          className='w-24 py-2 ml-auto mt-3 bg-slate-400 hover:bg-main px-3 rounded-md text-white font-bold transition-all'
           type='submit'
         >
           새 글 등록

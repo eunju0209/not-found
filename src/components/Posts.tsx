@@ -24,19 +24,13 @@ export default function Posts() {
           setPosts(posts);
         })
       : postRepository.sync((data) => {
-          const posts = Object.values(data);
+          const posts = Object.values(data).reverse();
           setPosts(posts);
-          setLast(posts[posts.length - 1].createdAt);
+          setLast(posts[posts.length - 1].id);
         }, category);
 
     return () => stopSync();
   }, [keyword, category, postRepository]);
-
-  useEffect(() => {
-    authService.onAuthChange((user) => {
-      user ? setAddBtn(true) : setAddBtn(false);
-    });
-  }, [authService]);
 
   useEffect(() => {
     if (!observerTarget.current || !last) return;
@@ -44,9 +38,9 @@ export default function Posts() {
     const observer = new IntersectionObserver((entries, observer) => {
       if (entries[0].isIntersecting) {
         postRepository.syncNext((data) => {
-          const posts = Object.values(data);
+          const posts = Object.values(data).reverse();
           setPosts((prev) => [...prev, ...posts]);
-          setLast(posts[posts.length - 1].createdAt);
+          posts.length > 1 ? setLast(posts[posts.length - 1].id) : setLast('');
         }, last);
       }
     });
@@ -56,6 +50,12 @@ export default function Posts() {
       observer.disconnect();
     };
   }, [postRepository, last]);
+
+  useEffect(() => {
+    authService.onAuthChange((user) => {
+      user ? setAddBtn(true) : setAddBtn(false);
+    });
+  }, [authService]);
 
   return (
     <section className='flex flex-col items-center py-6 h-full min-h-0'>
@@ -89,7 +89,7 @@ export default function Posts() {
           <Post key={post.id} post={post} />
         ))}
       </ul>
-      {category === 'all' ? <div ref={observerTarget}>More</div> : ''}
+      {category === 'all' && last ? <div ref={observerTarget}>More</div> : ''}
     </section>
   );
 }

@@ -3,6 +3,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import CommentView from '../components/CommentView';
 import NewComment from '../components/NewComment';
 import { useAuth, usePostRepository } from '../context/FirebaseContext';
+import { Viewer } from '@toast-ui/react-editor';
+import '@toast-ui/editor/dist/toastui-editor-viewer.css';
 
 export default function PostDetail() {
   const authService = useAuth();
@@ -32,10 +34,8 @@ export default function PostDetail() {
       <span className='w-32 text-md p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-4 text-center'>
         {post.category}
       </span>
-      <p className='text-md bg-slate-100 grow p-3 min-h-[10rem] mb-4'>
-        {post.content}
-      </p>
-      <div className='flex items-center justify-end'>
+      <Viewer initialValue={post.content} />
+      <div className='flex items-center justify-end mt-3'>
         {user && (
           <button
             className='w-24 py-2 bg-slate-400 hover:bg-red-500 px-3 rounded-md text-white font-bold transition-all mr-3'

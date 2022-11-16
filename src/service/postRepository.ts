@@ -1,7 +1,9 @@
 import {
   Database,
+  endBefore,
   equalTo,
   limitToFirst,
+  limitToLast,
   off,
   onValue,
   orderByChild,
@@ -9,7 +11,6 @@ import {
   ref,
   remove,
   set,
-  startAfter,
   update,
 } from 'firebase/database';
 import { PostType } from '../components/Post';
@@ -23,8 +24,8 @@ export default class PostRepository {
       category === 'all'
         ? query(
             ref(this.firebaseDB, 'posts'),
-            orderByChild('createdAt'),
-            limitToFirst(5)
+            orderByChild('id'),
+            limitToLast(5)
           )
         : query(
             ref(this.firebaseDB, 'posts'),
@@ -42,12 +43,14 @@ export default class PostRepository {
   syncNext(onUpdate: (posts: PostType[]) => void, last: string) {
     const postQuery = query(
       ref(this.firebaseDB, 'posts'),
-      orderByChild('createdAt'),
-      startAfter(last),
-      limitToFirst(5)
+      orderByChild('id'),
+      endBefore(last),
+      limitToLast(5)
     );
     onValue(postQuery, (snapshot) => {
       const data = snapshot.val();
+      console.log(data);
+
       data ? onUpdate(data) : onUpdate([]);
     });
     return () => off(postQuery);
