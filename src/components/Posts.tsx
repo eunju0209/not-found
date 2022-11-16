@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Post, { PostType } from './Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
@@ -12,19 +12,23 @@ export default function Posts() {
   const [posts, setPosts] = useState<PostType[]>([]);
   const [addBtn, setAddBtn] = useState(false);
   const [category, setCategory] = useState('all');
+  const [last, setLast] = useState('');
+  const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const stopSync = keyword
       ? postRepository.syncByKeyword((data) => {
-          const posts = Object.values(data)
-            .reverse()
-            .filter((post) => post.title.includes(keyword));
+          const posts = Object.values(data).filter((post) =>
+            post.title.includes(keyword)
+          );
           setPosts(posts);
         })
-      : postRepository.sync(
-          (posts) => setPosts(Object.values(posts).reverse()),
-          category
-        );
+      : postRepository.sync((data) => {
+          const posts = Object.values(data);
+          setPosts(posts);
+          setLast(posts[posts.length - 1].createdAt);
+        }, category);
+
     return () => stopSync();
   }, [keyword, category, postRepository]);
 
@@ -33,6 +37,25 @@ export default function Posts() {
       user ? setAddBtn(true) : setAddBtn(false);
     });
   }, [authService]);
+
+  useEffect(() => {
+    if (!observerTarget.current || !last) return;
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      if (entries[0].isIntersecting) {
+        postRepository.syncNext((data) => {
+          const posts = Object.values(data);
+          setPosts((prev) => [...prev, ...posts]);
+          setLast(posts[posts.length - 1].createdAt);
+        }, last);
+      }
+    });
+    observer.observe(observerTarget.current);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [postRepository, last]);
 
   return (
     <section className='flex flex-col items-center py-6 h-full min-h-0'>
@@ -66,6 +89,7 @@ export default function Posts() {
           <Post key={post.id} post={post} />
         ))}
       </ul>
+      {category === 'all' ? <div ref={observerTarget}>More</div> : ''}
     </section>
   );
 }
