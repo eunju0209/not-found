@@ -1,7 +1,13 @@
 # Not Found
 
-- https://inquisitive-faloodeh-15ad41.netlify.app
+- https://notfoundnot.netlify.app
 - 개발을 하다가 에러가 생기면 질문을 올릴 수 있는 커뮤니티 입니다.
+
+## Demo
+
+Click ⬇️
+
+[![](https://i9.ytimg.com/vi/JxKipGB43qc/mqdefault.jpg?sqp=CND_1psG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACkgWKAgwIABABGGUgZShlMA8=&rs=AOn4CLB54-UJTCV33H8Njfo38wtkzIkgbg)](https://youtu.be/JxKipGB43qc)
 
 ## Installation
 
@@ -22,3 +28,12 @@
 | REACT_APP_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId   |
 | REACT_APP_FIREBASE_APP_ID              | appId               |
 | REACT_APP_FIREBASE_MEASUREMENT_ID      | measurementId       |
+
+## Built With
+
+- React
+- TypeScript
+- react-router-dom
+- react-icons
+- Firebase
+- toast-ui
