@@ -1,46 +1,24 @@
-# Getting Started with Create React App
+# Not Found
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- https://inquisitive-faloodeh-15ad41.netlify.app
+- 개발을 하다가 에러가 생기면 질문을 올릴 수 있는 커뮤니티 입니다.
 
-## Available Scripts
+## Installation
 
-In the project directory, you can run:
+1. `git clone https://github.com/eunju0209/not-found.git`
+2. `cd not-found`
+3. `yarn install`
+4. `yarn start`
 
-### `yarn start`
+> .env 파일을 별로도 추가해서 firebase SDK를 설정해 주셔야 합니다.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+| 환경 변수 명                           | firebaseConfig 종류 |
+| -------------------------------------- | ------------------- |
+| REACT_APP_FIREBASE_API_KEY             | apiKey              |
+| REACT_APP_FIREBASE_AUTH_DOMAIN         | authDomain          |
+| REACT_APP_FIREBASE_DB_URL              | databaseURL         |
+| REACT_APP_FIREBASE_PROJECT_ID          | projectId           |
+| REACT_APP_FIREBASE_STORAGE_BUCKET      | storageBucket       |
+| REACT_APP_FIREBASE_MESSAGING_SENDER_ID | messagingSenderId   |
+| REACT_APP_FIREBASE_APP_ID              | appId               |
+| REACT_APP_FIREBASE_MEASUREMENT_ID      | measurementId       |
