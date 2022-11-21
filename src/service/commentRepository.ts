@@ -1,4 +1,4 @@
-import { Database, off, onValue, ref, set } from 'firebase/database';
+import { Database, off, onValue, ref, remove, set } from 'firebase/database';
 import { CommentType } from '../components/NewComment';
 import { db } from './firebase';
 
@@ -16,5 +16,9 @@ export default class CommentRepository {
 
   save(comment: CommentType, postId: string) {
     set(ref(this.firebaseDB, `comments/${postId}/${comment.id}`), comment);
+  }
+
+  remove(postId: string, commentId: string) {
+    remove(ref(this.firebaseDB, `comments/${postId}/${commentId}`));
   }
 }

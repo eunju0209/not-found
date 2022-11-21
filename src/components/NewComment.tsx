@@ -1,5 +1,5 @@
-import { FormEvent, useState } from 'react';
-import { useCommentRepository } from '../context/FirebaseContext';
+import { FormEvent, useEffect, useState } from 'react';
+import { useAuth, useCommentRepository } from '../context/FirebaseContext';
 
 export type CommentType = {
   id: string;
@@ -13,16 +13,19 @@ export type CommentType = {
 type NewCommentProps = {
   userEmail: string;
   postId: string;
-  userId: string;
 };
 
-export default function NewComment({
-  userEmail,
-  postId,
-  userId,
-}: NewCommentProps) {
+export default function NewComment({ userEmail, postId }: NewCommentProps) {
+  const authService = useAuth();
   const commentRepository = useCommentRepository();
   const [content, setContent] = useState('');
+  const [userId, setUserId] = useState('');
+
+  useEffect(() => {
+    authService.onAuthChange((user) => {
+      user && setUserId(user.uid);
+    });
+  }, [authService]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

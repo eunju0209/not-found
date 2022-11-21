@@ -64,13 +64,7 @@ export default function PostDetail() {
       <article className='border-t mt-10 pt-3'>
         <h2 className='text-2xl font-bold text-slate-600 mb-3'>댓글</h2>
         <CommentView postId={post.id} />
-        {userEmail && (
-          <NewComment
-            userEmail={userEmail}
-            postId={post.id}
-            userId={post.userId}
-          />
-        )}
+        {userEmail && <NewComment userEmail={userEmail} postId={post.id} />}
       </article>
     </section>
   );
