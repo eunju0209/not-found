@@ -6,6 +6,7 @@ export default function Signup() {
   const authService = useAuth();
   const navigate = useNavigate();
   const [signupValues, setSignupValues] = useState({ email: '', password: '' });
+  const [isDuplicate, setIsDuplicate] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -15,6 +16,12 @@ export default function Signup() {
       .then(() => {
         navigate('/login');
         setSignupValues({ email: '', password: '' });
+        setIsDuplicate(false);
+      })
+      .catch((error) => {
+        if (error.code === 'auth/email-already-in-use') {
+          setIsDuplicate(true);
+        }
       });
   };
 
@@ -38,6 +45,11 @@ export default function Signup() {
           placeholder='Email'
           required
         />
+        {isDuplicate && (
+          <p className='text-sm text-red-600 mb-3 text-center'>
+            중복된 이메일입니다.
+          </p>
+        )}
         <input
           className='text-lg p-2 border-solid border-2 border-slate-300 rounded-lg outline-none mb-2'
           type='password'
