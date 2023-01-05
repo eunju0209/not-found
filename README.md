@@ -4,7 +4,7 @@
 - 개발을 하다가 에러가 생기면 질문을 올릴 수 있는 커뮤니티 입니다.
 
 ## Demo
-[영상 바로가기 ⬅️](https://i9.ytimg.com/vi/JxKipGB43qc/mqdefault.jpg?sqp=CND_1psG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYACkgWKAgwIABABGGUgZShlMA8=&rs=AOn4CLB54-UJTCV33H8Njfo38wtkzIkgbg)](https://youtu.be/JxKipGB43qc)
+[영상 바로가기 ⬅️](https://youtu.be/JxKipGB43qc)
 
 ## Installation
 
