@@ -1,6 +1,4 @@
 # Not Found
-
-- https://not-found0209.netlify.app
 - 개발을 하다가 에러가 생기면 질문을 올릴 수 있는 커뮤니티 입니다.
 
 ## Demo
