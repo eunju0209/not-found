@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import NotFound from './pages/NotFound';
-import Posts from './components/Posts';
+import Posts from './pages/Posts';
 import PostDetail from './pages/PostDetail';
 import Login from './pages/Login';
 import Signup from './pages/Signup';

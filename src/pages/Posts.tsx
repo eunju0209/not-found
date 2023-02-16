@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import Post, { PostType } from './Post';
+import Post, { PostType } from '../components/Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
 import { useAuth, usePostRepository } from '../context/FirebaseContext';
@@ -19,11 +19,9 @@ export default function Posts() {
   useEffect(() => {
     const stopSync = keyword
       ? postRepository.syncByKeyword((data) => {
-          const posts = Object.values(data).filter((post) =>
-            post.title.includes(keyword)
-          );
+          const posts = Object.values(data);
           setPosts(posts);
-        })
+        }, keyword)
       : postRepository.sync((data) => {
           const posts = Object.values(data).reverse();
           setPosts(posts);

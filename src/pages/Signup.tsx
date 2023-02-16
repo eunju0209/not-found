@@ -26,10 +26,11 @@ export default function Signup() {
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setSignupValues((values) => ({
-      ...values,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+    if (name === 'email') {
+      setIsDuplicate(false);
+    }
+    setSignupValues((values) => ({ ...values, [name]: value }));
   };
 
   return (
