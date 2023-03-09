@@ -11,6 +11,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import NewPost from './pages/NewPost';
 import UpdatePost from './components/UpdatePost';
+import 'react-toastify/dist/ReactToastify.css';
 
 const router = createBrowserRouter([
   {
