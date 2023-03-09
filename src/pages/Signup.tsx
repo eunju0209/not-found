@@ -1,25 +1,22 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/FirebaseContext';
+import { signup } from '../service/auth';
 
 export default function Signup() {
-  const authService = useAuth();
   const navigate = useNavigate();
   const [signupValues, setSignupValues] = useState({ email: '', password: '' });
   const [isDuplicate, setIsDuplicate] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-
-    authService
-      .signup(signupValues.email, signupValues.password) //
+    signup(signupValues.email, signupValues.password) //
       .then(() => {
         navigate('/login');
         setSignupValues({ email: '', password: '' });
         setIsDuplicate(false);
       })
-      .catch((error) => {
-        if (error.code === 'auth/email-already-in-use') {
+      .catch((err) => {
+        if (err.code === 'auth/email-already-in-use') {
           setIsDuplicate(true);
         }
       });

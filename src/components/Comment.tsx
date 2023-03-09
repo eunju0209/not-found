@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useAuth, useCommentRepository } from '../context/FirebaseContext';
+import { useCommentRepository } from '../context/FirebaseContext';
 import { CommentType } from './NewComment';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BsPencil } from 'react-icons/bs';
 import UpdateComment from './UpdateComment';
+import { onAuthChange } from '../service/auth';
 
 type CommentProps = {
   comment: CommentType;
@@ -11,16 +12,15 @@ type CommentProps = {
 };
 
 export default function Comment({ comment, postId }: CommentProps) {
-  const authService = useAuth();
   const commentRepository = useCommentRepository();
   const [userId, setUserId] = useState('');
   const [isSelect, setIsSelect] = useState(false);
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       user ? setUserId(user.uid) : setUserId('');
     });
-  }, [authService]);
+  }, []);
 
   return (
     <li

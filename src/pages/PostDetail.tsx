@@ -2,12 +2,12 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CommentView from '../components/CommentView';
 import NewComment from '../components/NewComment';
-import { useAuth, usePostRepository } from '../context/FirebaseContext';
+import { usePostRepository } from '../context/FirebaseContext';
 import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
+import { onAuthChange } from '../service/auth';
 
 export default function PostDetail() {
-  const authService = useAuth();
   const postRepository = usePostRepository();
   const navigate = useNavigate();
   const {
@@ -17,11 +17,11 @@ export default function PostDetail() {
   const [userEmail, setUserEmail] = useState('');
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       user && user.uid === post.userId ? setUser(true) : setUser(false);
       user ? setUserEmail(user.email!) : setUserEmail('');
     });
-  }, [authService, post.userId]);
+  }, [post.userId]);
 
   const handleClick = () => {
     postRepository.remove(post.id);

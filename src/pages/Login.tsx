@@ -1,17 +1,24 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/FirebaseContext';
+import { googleLogin, login, onAuthChange } from '../service/auth';
 
 export default function Login() {
-  const authService = useAuth();
   const navigate = useNavigate();
   const [loginValues, setLoginValues] = useState({ email: '', password: '' });
+  const [isFailed, setIsFailed] = useState(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    authService
-      .login(loginValues.email, loginValues.password)
-      .then(() => navigate('/'));
+    login(loginValues.email, loginValues.password) //
+      .then(() => navigate('/'))
+      .catch((err) => {
+        if (
+          err.code === 'auth/user-not-found' ||
+          err.code === 'auth/wrong-password'
+        ) {
+          setIsFailed(true);
+        }
+      });
   };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -22,16 +29,16 @@ export default function Login() {
   };
 
   const handleGoogleLogin = () => {
-    authService
-      .googleLogin() //
-      .then(() => navigate('/'));
+    googleLogin() //
+      .then(() => navigate('/'))
+      .catch(console.error);
   };
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       user && navigate('/');
     });
-  }, [authService, navigate]);
+  }, [navigate]);
 
   return (
     <section className='flex flex-col items-center w-full p-10 pb-3'>
@@ -58,6 +65,7 @@ export default function Login() {
           로그인
         </button>
       </form>
+      {isFailed && <p>로그인 정보가 잘못되었습니다.</p>}
       <div className='flex justify-around w-3/12 mt-3'>
         <button
           className='w-36 bg-main py-2 rounded-lg text-white font-bold'

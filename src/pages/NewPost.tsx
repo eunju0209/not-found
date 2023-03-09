@@ -1,14 +1,14 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth, usePostRepository } from '../context/FirebaseContext';
+import { usePostRepository } from '../context/FirebaseContext';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import { onAuthChange } from '../service/auth';
 
 export default function NewPost() {
-  const authService = useAuth();
   const postRepository = usePostRepository();
   const navigate = useNavigate();
   const navigateState = useLocation().state;
@@ -21,14 +21,14 @@ export default function NewPost() {
   });
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       if (user) {
         setUserId(user.uid);
       } else {
         navigate('/');
       }
     });
-  }, [authService, navigate]);
+  }, [navigate]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

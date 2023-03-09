@@ -3,10 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Post, { PostType } from '../components/Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
-import { useAuth, usePostRepository } from '../context/FirebaseContext';
+import { usePostRepository } from '../context/FirebaseContext';
+import { onAuthChange } from '../service/auth';
 
 export default function Posts() {
-  const authService = useAuth();
   const postRepository = usePostRepository();
   const navigate = useNavigate();
   const { keyword } = useParams();
@@ -55,10 +55,10 @@ export default function Posts() {
   }, [postRepository, last]);
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       user ? setAddBtn(true) : setAddBtn(false);
     });
-  }, [authService]);
+  }, []);
 
   return (
     <section className='flex flex-col items-center py-6 h-full min-h-0'>

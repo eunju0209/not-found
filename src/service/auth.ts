@@ -1,5 +1,4 @@
 import {
-  Auth,
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
   onAuthStateChanged,
@@ -11,29 +10,25 @@ import {
 } from 'firebase/auth';
 import { auth } from './firebase';
 
-export default class AuthService {
-  private firebaseAuth: Auth = auth;
+export async function login(
+  email: string,
+  password: string
+): Promise<UserCredential> {
+  return signInWithEmailAndPassword(auth, email, password);
+}
 
-  signup(email: string, password: string): Promise<UserCredential> {
-    return createUserWithEmailAndPassword(this.firebaseAuth, email, password);
-  }
+export async function googleLogin() {
+  return signInWithPopup(auth, new GoogleAuthProvider());
+}
 
-  login(email: string, password: string): Promise<UserCredential> {
-    return signInWithEmailAndPassword(this.firebaseAuth, email, password);
-  }
+export async function signup(email: string, password: string) {
+  return createUserWithEmailAndPassword(auth, email, password);
+}
 
-  googleLogin() {
-    const provider = new GoogleAuthProvider();
-    return signInWithPopup(this.firebaseAuth, provider);
-  }
+export async function logout() {
+  return signOut(auth);
+}
 
-  logout() {
-    signOut(this.firebaseAuth);
-  }
-
-  onAuthChange(onUserChanged: (user: User | null) => void) {
-    onAuthStateChanged(this.firebaseAuth, (user) => {
-      onUserChanged(user);
-    });
-  }
+export async function onAuthChange(callback: (user: User | null) => void) {
+  onAuthStateChanged(auth, callback);
 }

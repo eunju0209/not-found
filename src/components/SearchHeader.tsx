@@ -1,29 +1,28 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BsFillExclamationCircleFill, BsSearch } from 'react-icons/bs';
-import { useAuth } from '../context/FirebaseContext';
+import { logout, onAuthChange } from '../service/auth';
 
 export default function SearchHeader() {
-  const authService = useAuth();
   const { keyword } = useParams();
   const navigate = useNavigate();
   const [userId, setUserId] = useState('');
   const [text, setText] = useState('');
 
   useEffect(() => {
-    authService.onAuthChange((user) => {
+    onAuthChange((user) => {
       if (user) {
         setUserId(user.uid);
       } else {
         setUserId('');
       }
     });
-  }, [authService]);
+  }, []);
 
   useEffect(() => setText(keyword || ''), [keyword]);
 
   const handleLogout = () => {
-    authService.logout();
+    logout();
     setUserId('');
   };
 
