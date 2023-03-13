@@ -1,14 +1,13 @@
 import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { usePostRepository } from '../context/FirebaseContext';
 import '@toast-ui/editor/dist/toastui-editor.css';
 import { Editor } from '@toast-ui/react-editor';
 import 'tui-color-picker/dist/tui-color-picker.css';
 import '@toast-ui/editor-plugin-color-syntax/dist/toastui-editor-plugin-color-syntax.css';
 import colorSyntax from '@toast-ui/editor-plugin-color-syntax';
+import { updatePost } from '../api/post';
 
 export default function UpdatePost() {
-  const postRepository = usePostRepository();
   const navigate = useNavigate();
   const editorRef = useRef<Editor>(null);
   const {
@@ -20,8 +19,10 @@ export default function UpdatePost() {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const newPost = { ...post, ...updatedPost };
-    postRepository.update(post.id, newPost);
-    navigate(`/posts/detail/${post.id}`, { state: { post: newPost } });
+    updatePost(post.id, newPost) //
+      .then(() =>
+        navigate(`/posts/detail/${post.id}`, { state: { post: newPost } })
+      );
   };
 
   const handleChange = (

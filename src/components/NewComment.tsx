@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { useCommentRepository } from '../context/FirebaseContext';
-import { onAuthChange } from '../service/auth';
+import { onAuthChange } from '../api/auth';
 
 export type CommentType = {
   id: string;

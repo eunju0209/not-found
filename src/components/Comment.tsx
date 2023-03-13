@@ -4,7 +4,7 @@ import { CommentType } from './NewComment';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BsPencil } from 'react-icons/bs';
 import UpdateComment from './UpdateComment';
-import { onAuthChange } from '../service/auth';
+import { onAuthChange } from '../api/auth';
 
 type CommentProps = {
   comment: CommentType;

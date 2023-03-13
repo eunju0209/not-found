@@ -1,6 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signup } from '../service/auth';
+import { signup } from '../api/auth';
 
 export default function Signup() {
   const navigate = useNavigate();

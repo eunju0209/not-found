@@ -1,7 +1,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
-import { googleLogin, login, onAuthChange } from '../service/auth';
+import { googleLogin, login, onAuthChange } from '../api/auth';
 
 export default function Login() {
   const navigate = useNavigate();

@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import CommentView from '../components/CommentView';
 import NewComment from '../components/NewComment';
-import { usePostRepository } from '../context/FirebaseContext';
 import { Viewer } from '@toast-ui/react-editor';
 import '@toast-ui/editor/dist/toastui-editor-viewer.css';
-import { onAuthChange } from '../service/auth';
+import { onAuthChange } from '../api/auth';
+import { removePost } from '../api/post';
 
 export default function PostDetail() {
-  const postRepository = usePostRepository();
   const navigate = useNavigate();
   const {
     state: { post },
@@ -24,8 +23,8 @@ export default function PostDetail() {
   }, [post.userId]);
 
   const handleClick = () => {
-    postRepository.remove(post.id);
-    navigate(-1);
+    removePost(post.id) //
+      .then(() => navigate(-1));
   };
 
   return (

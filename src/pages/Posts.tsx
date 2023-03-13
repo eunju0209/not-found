@@ -3,11 +3,10 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Post, { PostType } from '../components/Post';
 import { AiFillPlusCircle } from 'react-icons/ai';
 import { BsFillArrowDownCircleFill } from 'react-icons/bs';
-import { usePostRepository } from '../context/FirebaseContext';
-import { onAuthChange } from '../service/auth';
+import { onAuthChange } from '../api/auth';
+import { getPosts, searchByKeword } from '../api/post';
 
 export default function Posts() {
-  const postRepository = usePostRepository();
   const navigate = useNavigate();
   const { keyword } = useParams();
   const [posts, setPosts] = useState<PostType[]>([]);
@@ -17,42 +16,33 @@ export default function Posts() {
   const observerTarget = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const stopSync = keyword
-      ? postRepository.syncByKeyword((data) => {
-          const posts = Object.values(data);
-          setPosts(posts);
-        }, keyword)
-      : postRepository.sync((data) => {
-          const posts = Object.values(data).reverse();
-          setPosts(posts);
-          setLast(posts[posts.length - 1].id);
-        }, category);
+    keyword
+      ? searchByKeword(keyword).then(setPosts)
+      : getPosts(category).then(setPosts);
+  }, [category, keyword]);
 
-    return () => stopSync();
-  }, [keyword, category, postRepository]);
+  // useEffect(() => {
+  //   if (!observerTarget.current || !last) return;
 
-  useEffect(() => {
-    if (!observerTarget.current || !last) return;
+  //   const observer = new IntersectionObserver((entries, observer) => {
+  //     if (entries[0].isIntersecting) {
+  //       setTimeout(() => {
+  //         postRepository.syncNext((data) => {
+  //           const posts = Object.values(data).reverse();
+  //           setPosts((prev) => [...prev, ...posts]);
+  //           posts.length > 1
+  //             ? setLast(posts[posts.length - 1].id)
+  //             : setLast('');
+  //         }, last);
+  //       }, 300);
+  //     }
+  //   });
+  //   observer.observe(observerTarget.current);
 
-    const observer = new IntersectionObserver((entries, observer) => {
-      if (entries[0].isIntersecting) {
-        setTimeout(() => {
-          postRepository.syncNext((data) => {
-            const posts = Object.values(data).reverse();
-            setPosts((prev) => [...prev, ...posts]);
-            posts.length > 1
-              ? setLast(posts[posts.length - 1].id)
-              : setLast('');
-          }, last);
-        }, 300);
-      }
-    });
-    observer.observe(observerTarget.current);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [postRepository, last]);
+  //   return () => {
+  //     observer.disconnect();
+  //   };
+  // }, [postRepository, last]);
 
   useEffect(() => {
     onAuthChange((user) => {

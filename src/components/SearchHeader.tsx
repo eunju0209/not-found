@@ -1,7 +1,7 @@
 import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { BsFillExclamationCircleFill, BsSearch } from 'react-icons/bs';
-import { logout, onAuthChange } from '../service/auth';
+import { logout, onAuthChange } from '../api/auth';
 
 export default function SearchHeader() {
   const { keyword } = useParams();
