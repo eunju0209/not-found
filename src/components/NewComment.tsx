@@ -1,6 +1,6 @@
 import { FormEvent, useEffect, useState } from 'react';
-import { useCommentRepository } from '../context/FirebaseContext';
 import { onAuthChange } from '../api/auth';
+import { addNewComment } from '../api/comment';
 
 export type CommentType = {
   id: string;
@@ -17,7 +17,6 @@ type NewCommentProps = {
 };
 
 export default function NewComment({ userEmail, postId }: NewCommentProps) {
-  const commentRepository = useCommentRepository();
   const [content, setContent] = useState('');
   const [userId, setUserId] = useState('');
 
@@ -37,7 +36,7 @@ export default function NewComment({ userEmail, postId }: NewCommentProps) {
       content,
       createdAt: new Date().toString(),
     };
-    commentRepository.save(comment, postId);
+    addNewComment(comment, postId);
     setContent('');
   };
 

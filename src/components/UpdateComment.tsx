@@ -1,5 +1,5 @@
 import { FormEvent, useState } from 'react';
-import { useCommentRepository } from '../context/FirebaseContext';
+import { updateComment } from '../api/comment';
 import { CommentType } from './NewComment';
 
 type UpdateCommentProps = {
@@ -13,13 +13,12 @@ export default function UpdateComment({
   postId,
   onSelect,
 }: UpdateCommentProps) {
-  const commentRepository = useCommentRepository();
   const [content, setContent] = useState(comment.content);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const updatedComment = { ...comment, content };
-    commentRepository.update(updatedComment, postId);
+    updateComment(updatedComment, postId);
     onSelect(false);
   };
 

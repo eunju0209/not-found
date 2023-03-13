@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
-import { useCommentRepository } from '../context/FirebaseContext';
 import { CommentType } from './NewComment';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { BsPencil } from 'react-icons/bs';
 import UpdateComment from './UpdateComment';
 import { onAuthChange } from '../api/auth';
+import { removeComment } from '../api/comment';
 
 type CommentProps = {
   comment: CommentType;
@@ -12,7 +12,6 @@ type CommentProps = {
 };
 
 export default function Comment({ comment, postId }: CommentProps) {
-  const commentRepository = useCommentRepository();
   const [userId, setUserId] = useState('');
   const [isSelect, setIsSelect] = useState(false);
 
@@ -31,7 +30,7 @@ export default function Comment({ comment, postId }: CommentProps) {
         <>
           <button
             className='absolute right-1 top-1 text-slate-400 hover:scale-125 transition-transform'
-            onClick={() => commentRepository.remove(postId, comment.id)}
+            onClick={() => removeComment(postId, comment.id)}
           >
             <AiOutlineCloseCircle />
           </button>
