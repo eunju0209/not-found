@@ -49,11 +49,14 @@ export async function addNewPost(post: PostType): Promise<void> {
   return set(ref(db, `posts/${post.id}`), post);
 }
 
-export async function removePost(postId: string) {
+export async function removePost(postId: string): Promise<void> {
   return remove(ref(db, `posts/${postId}`));
 }
 
-export async function updatePost(postId: string, post: PostType) {
+export async function updatePost(
+  postId: string,
+  post: PostType
+): Promise<void> {
   const updates = { [`/posts/${postId}`]: post };
   return update(ref(db), updates);
 }
