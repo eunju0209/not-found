@@ -13,7 +13,7 @@ export type NewPostType = {
 export default function NewPost() {
   const navigate = useNavigate();
   const navigateState = useLocation().state;
-  const [userId, setUserId] = useState(navigateState && navigateState.id);
+  const [userInfo, setUserInfo] = useState(navigateState && navigateState.id);
   const [postValues, setPostValues] = useState({
     title: '',
     category: 'javascript',
@@ -23,7 +23,7 @@ export default function NewPost() {
   useEffect(() => {
     onAuthChange((user) => {
       if (user) {
-        setUserId(user.uid);
+        setUserInfo({ userId: user.uid, email: user.email });
       } else {
         navigate('/');
       }
@@ -36,8 +36,8 @@ export default function NewPost() {
       ...postValues,
       id: Date.now().toString(),
       createdAt: new Date().toString(),
-      userId,
-      email: 'bori@gmail.com',
+      userId: userInfo.userId,
+      email: userInfo.email,
     };
     addNewPost(post) //
       .then(() => navigate('/'));
